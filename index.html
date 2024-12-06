@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car Emission & Cost Comparison</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: #f8f9fa;
+        }
+        .header-bar {
+            background-color: #4a7f14; /* Green header */
+            color: #fff;
+            padding: 1rem;
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        .comparison-table {
+            background: #ffffff;
+            border: 1px solid #dee2e6;
+        }
+        .comparison-table th, .comparison-table td {
+            vertical-align: middle;
+        }
+        .section-heading {
+            background-color: #f9e176; /* Yellow background for section headings */
+            font-weight: bold;
+            text-align: left;
+        }
+        .subheading {
+            background-color: #e9e9e9;
+            font-weight: bold;
+        }
+        .highlight-cell {
+            background-color: #fff3cd; 
+        }
+        .note-text {
+            font-size: 0.9rem;
+            font-style: italic;
+        }
+        .car-select {
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="header-bar">How Greener is your car?</div>
+
+    <div class="container my-5">
+        <table class="table table-bordered comparison-table">
+            <thead>
+                <tr class="section-heading">
+                    <th colspan="3">Car Selection</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="subheading">
+                    <td>Selection</td>
+                    <td>Benchmark Car</td>
+                    <td>My Car</td>
+                </tr>
+                <tr>
+                    <td>Model</td>
+                    <!-- Dynamic dropdowns populated from vehicleData -->
+                    <td>
+                        <select id="car1" class="form-select car-select">
+                            <option value="" disabled selected>Select a car</option>
+                        </select>
+                    </td>
+                    <td>
+                        <select id="car2" class="form-select car-select">
+                            <option value="" disabled selected>Select a car</option>
+                        </select>
+                    </td>
+                </tr>
+            </tbody>
+            
+            <thead>
+                <tr class="section-heading">
+                    <th colspan="3">Emission Reduction</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Carbon Emission</td>
+                    <td id="emissionCar1"></td>
+                    <td id="emissionCar2"></td>
+                </tr>
+                <tr class="highlight-cell">
+                    <td>Reduction</td>
+                    <td colspan="2" id="emissionReduction"></td>
+                </tr>
+                <tr>
+                    <td>Conclusion</td>
+                    <td colspan="2" class="note-text" id="emissionConclusion"></td>
+                </tr>
+            </tbody>
+
+            <thead>
+                <tr class="section-heading">
+                    <th colspan="3">Emission Reduction</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Fuel Consumption (Cost per km)</td>
+                    <td id="costCar1"></td>
+                    <td id="costCar2"></td>
+                </tr>
+                <tr class="highlight-cell">
+                    <td>Savings</td>
+                    <td colspan="2" id="costSavings"></td>
+                </tr>
+                <tr>
+                    <td>Conclusion</td>
+                    <td colspan="2" class="note-text" id="costConclusion"></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        // Your vehicle data array (example data, replace with your updated array)
+        const vehicleData = [
+            {"Model": "Air EV", "CO₂ Emission (kg/km)": 0.08, "Cost per km (Rp)": 219.47},
+            {"Model": "Binguo", "CO₂ Emission (kg/km)": 0.08, "Cost per km (Rp)": 236.74},
+            {"Model": "Cloud EV", "CO₂ Emission (kg/km)": 0.10, "Cost per km (Rp)": 271.26},
+            {"Model": "EC3", "CO₂ Emission (kg/km)": 0.12, "Cost per km (Rp)": 339.08},
+            {"Model": "Ioniq 5", "CO₂ Emission (kg/km)": 0.10, "Cost per km (Rp)": 283.59},
+            {"Model": "Ioniq 6", "CO₂ Emission (kg/km)": 0.13, "Cost per km (Rp)": 367.43},
+            {"Model": "Kona", "CO₂ Emission (kg/km)": 0.11, "Cost per km (Rp)": 318.11},
+            {"Model": "Leaf", "CO₂ Emission (kg/km)": 0.09, "Cost per km (Rp)": 268.79},
+            {"Model": "Dolphin", "CO₂ Emission (kg/km)": 0.09, "Cost per km (Rp)": 263.86},
+            {"Model": "Atto 3", "CO₂ Emission (kg/km)": 0.13, "Cost per km (Rp)": 355.10},
+            {"Model": "Y Plus", "CO₂ Emission (kg/km)": 0.11, "Cost per km (Rp)": 303.32},
+            {"Model": "ES", "CO₂ Emission (kg/km)": 0.11, "Cost per km (Rp)": 308.25},
+            {"Model": "V Pro", "CO₂ Emission (kg/km)": 0.11, "Cost per km (Rp)": 308.25},
+            {"Model": "Hyptec HT", "CO₂ Emission (kg/km)": 0.12, "Cost per km (Rp)": 340.31},
+            {"Model": "Omoda E5", "CO₂ Emission (kg/km)": 0.16, "Cost per km (Rp)": 456.21},
+            {"Model": "V Pro", "CO₂ Emission (kg/km)": 0.08, "Cost per km (Rp)": 236.74},
+            {"Model": "X", "CO₂ Emission (kg/km)": 0.11, "Cost per km (Rp)": 303.32},
+            {"Model": "E1", "CO₂ Emission (kg/km)": 0.07, "Cost per km (Rp)": 189.88},
+            {"Model": "Avanza 1.3 G Matic", "CO₂ Emission (kg/km)": 0.19, "Cost per km (Rp)": 975.81},
+            {"Model": "Avanza 1.5 Matic", "CO₂ Emission (kg/km)": 0.20, "Cost per km (Rp)": 1043.10},
+            {"Model": "Agya", "CO₂ Emission (kg/km)": 0.12, "Cost per km (Rp)": 620.51},
+            {"Model": "Calya", "CO₂ Emission (kg/km)": 0.12, "Cost per km (Rp)": 630.21},
+            {"Model": "All New Brio", "CO₂ Emission (kg/km)": 0.14, "Cost per km (Rp)": 715.98},
+            {"Model": "Avanza Veloz Matic", "CO₂ Emission (kg/km)": 0.22, "Cost per km (Rp)": 1152.38},
+            {"Model": "Kijang Innova Zenix", "CO₂ Emission (kg/km)": 0.19, "Cost per km (Rp)": 1000.83},
+            {"Model": "Kijang Innova Zenix G Hybrid", "CO₂ Emission (kg/km)": 0.10, "Cost per km (Rp)": 533.04},
+            {"Model": "Cross Hybrid", "CO₂ Emission (kg/km)": 0.07, "Cost per km (Rp)": 390.32}
+        ];
+
+        // Populate dropdowns with vehicle models
+        const populateDropdown = (dropdownId) => {
+            const dropdown = document.getElementById(dropdownId);
+            vehicleData.forEach(vehicle => {
+                const option = document.createElement("option");
+                option.value = vehicle["Model"];
+                option.textContent = vehicle["Model"];
+                dropdown.appendChild(option);
+            });
+        };
+
+        populateDropdown("car1");
+        populateDropdown("car2");
+
+        
+        // Calculate and display results
+        const calculateResults = () => {
+            const car1 = document.getElementById("car1").value;
+            const car2 = document.getElementById("car2").value;
+
+            if (car1 && car2) {
+                const car1Data = vehicleData.find(vehicle => vehicle.Model === car1);
+                const car2Data = vehicleData.find(vehicle => vehicle.Model === car2);
+
+                if (car1Data && car2Data) {
+                    // Update CO₂ emission values
+                    document.getElementById("emissionCar1").textContent = car1Data["CO₂ Emission (kg/km)"].toFixed(2);
+                    document.getElementById("emissionCar2").textContent = car2Data["CO₂ Emission (kg/km)"].toFixed(2);
+
+                    // Calculate emission difference percentage
+                    const emissionDiff = ((car2Data["CO₂ Emission (kg/km)"] - car1Data["CO₂ Emission (kg/km)"]) / car1Data["CO₂ Emission (kg/km)"]) * 100;
+                    const formattedEmissionDiff = Math.abs(emissionDiff).toFixed(2);
+
+                    const emissionReductionElement = document.getElementById("emissionReduction");
+                    emissionReductionElement.textContent = emissionDiff < 0 ? `${formattedEmissionDiff}%` : `-${formattedEmissionDiff}%`;
+                    emissionReductionElement.style.color = emissionDiff < 0 ? "green" : "red";
+
+                    const emissionConclusionElement = document.getElementById("emissionConclusion");
+                    emissionConclusionElement.textContent = emissionDiff < 0
+                        ? `The second car is efficient, because it emits ${formattedEmissionDiff}% less CO₂.`
+                        : `The second car is inefficient, because it emits ${formattedEmissionDiff}% more CO₂.`;
+
+                    // Update cost per km values
+                    document.getElementById("costCar1").textContent = `Rp ${car1Data["Cost per km (Rp)"].toFixed(2)}`;
+                    document.getElementById("costCar2").textContent = `Rp ${car2Data["Cost per km (Rp)"].toFixed(2)}`;
+
+                    // Calculate cost difference
+                    const costDiff = car2Data["Cost per km (Rp)"] - car1Data["Cost per km (Rp)"];
+                    const formattedCostDiff = Math.abs(costDiff).toFixed(2);
+
+                    const costSavingsElement = document.getElementById("costSavings");
+                    costSavingsElement.textContent = costDiff < 0 ? `Rp ${formattedCostDiff}` : `-Rp ${formattedCostDiff}`;
+                    costSavingsElement.style.color = costDiff < 0 ? "green" : "red";
+
+                    const costConclusionElement = document.getElementById("costConclusion");
+                    costConclusionElement.textContent = costDiff < 0
+                        ? `The second car is cost efficient, because it costs Rp ${formattedCostDiff} less per km.`
+                        : `The second car is not cost-efficient, because it costs Rp ${formattedCostDiff} more per km.`;
+                }
+            }
+        };
+
+        // Add event listeners to dropdowns
+        document.getElementById("car1").addEventListener("change", calculateResults);
+        document.getElementById("car2").addEventListener("change", calculateResults);
+    </script>
+</body>
+</html>
