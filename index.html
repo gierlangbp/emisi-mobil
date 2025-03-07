@@ -4,125 +4,104 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Car Emission & Cost Comparison</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <style>
-        body {
-            background: #f8f9fa;
-        }
-        .header-bar {
-            background-color: #4a7f14; /* Green header */
-            color: #fff;
-            padding: 1rem;
-            text-align: center;
-            font-size: 1.5rem;
-            font-weight: bold;
-        }
-        .comparison-table {
-            background: #ffffff;
-            border: 1px solid #dee2e6;
-        }
-        .comparison-table th, .comparison-table td {
-            vertical-align: middle;
-        }
-        .section-heading {
-            background-color: #f9e176; /* Yellow background for section headings */
-            font-weight: bold;
-            text-align: left;
-        }
-        .subheading {
-            background-color: #e9e9e9;
-            font-weight: bold;
-        }
-        .highlight-cell {
-            background-color: #fff3cd; 
-        }
-        .note-text {
-            font-size: 0.9rem;
-            font-style: italic;
-        }
-        .car-select {
-            width: 100%;
-        }
-    </style>
+    <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body>
-    <div class="header-bar">How Greener is your car?</div>
+<body class="bg-gray-50 min-h-screen">
+    <div class="bg-green-600 text-white py-4 px-4 text-center">
+        <h1 class="text-2xl font-bold">How Greener is your car?</h1>
+    </div>
 
-    <div class="container my-5">
-        <table class="table table-bordered comparison-table">
-            <thead>
-                <tr class="section-heading">
-                    <th colspan="3">Car Selection</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr class="subheading">
-                    <td>Selection</td>
-                    <td>Benchmark Car</td>
-                    <td>My Car</td>
-                </tr>
-                <tr>
-                    <td>Model</td>
-                    <!-- Dynamic dropdowns populated from vehicleData -->
-                    <td>
-                        <select id="car1" class="form-select car-select">
-                            <option value="" disabled selected>Select a car</option>
-                        </select>
-                    </td>
-                    <td>
-                        <select id="car2" class="form-select car-select">
-                            <option value="" disabled selected>Select a car</option>
-                        </select>
-                    </td>
-                </tr>
-            </tbody>
-            
-            <thead>
-                <tr class="section-heading">
-                    <th colspan="3">Emission Reduction</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Carbon Emission (kgCO₂e/km)</td>
-                    <td id="emissionCar1"></td>
-                    <td id="emissionCar2"></td>
-                </tr>
-                <tr class="highlight-cell">
-                    <td>Reduction</td>
-                    <td colspan="2" id="emissionReduction"></td>
-                </tr>
-                <tr>
-                    <td>Conclusion</td>
-                    <td colspan="2" class="note-text" id="emissionConclusion"></td>
-                </tr>
-            </tbody>
+    <div class="max-w-4xl mx-auto my-8 px-4">
+        <div class="bg-white rounded-lg shadow-md overflow-hidden">
+            <!-- Car Selection Section -->
+            <div class="border-b">
+                <div class="bg-amber-200 font-bold px-6 py-3 text-gray-800">
+                    Car Selection
+                </div>
+                
+                <div class="px-6 py-4">
+                    <div class="grid grid-cols-3 gap-4 mb-2 font-medium text-gray-700">
+                        <div>Selection</div>
+                        <div>Benchmark Car</div>
+                        <div>My Car</div>
+                    </div>
+                    
+                    <div class="grid grid-cols-3 gap-4">
+                        <div class="py-2">Model</div>
+                        <div>
+                            <select 
+                                id="car1"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                            >
+                                <option value="" disabled selected>Select a car</option>
+                            </select>
+                        </div>
+                        <div>
+                            <select 
+                                id="car2"
+                                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                            >
+                                <option value="" disabled selected>Select a car</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-            <thead>
-                <tr class="section-heading">
-                    <th colspan="3">Emission Reduction</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Fuel Consumption (Cost per km)</td>
-                    <td id="costCar1"></td>
-                    <td id="costCar2"></td>
-                </tr>
-                <tr class="highlight-cell">
-                    <td>Savings</td>
-                    <td colspan="2" id="costSavings"></td>
-                </tr>
-                <tr>
-                    <td>Conclusion</td>
-                    <td colspan="2" class="note-text" id="costConclusion"></td>
-                </tr>
-            </tbody>
-        </table>
+            <!-- Emission Reduction Section -->
+            <div class="border-b">
+                <div class="bg-amber-200 font-bold px-6 py-3 text-gray-800">
+                    Emission Reduction
+                </div>
+                
+                <div class="px-6 py-2">
+                    <div class="grid grid-cols-3 gap-4 py-3 border-b">
+                        <div class="text-gray-700">Carbon Emission (kgCO₂e/km)</div>
+                        <div id="emissionCar1">-</div>
+                        <div id="emissionCar2">-</div>
+                    </div>
+                    
+                    <div class="grid grid-cols-3 gap-4 py-3 border-b bg-yellow-50">
+                        <div class="text-gray-700">Reduction</div>
+                        <div id="emissionReduction" class="col-span-2">-</div>
+                    </div>
+                    
+                    <div class="grid grid-cols-3 gap-4 py-3">
+                        <div class="text-gray-700">Conclusion</div>
+                        <div id="emissionConclusion" class="col-span-2 text-gray-600 italic text-sm">-</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Cost Reduction Section -->
+            <div>
+                <div class="bg-amber-200 font-bold px-6 py-3 text-gray-800">
+                    Cost Reduction
+                </div>
+                
+                <div class="px-6 py-2">
+                    <div class="grid grid-cols-3 gap-4 py-3 border-b">
+                        <div class="text-gray-700">Fuel Consumption (Cost per km)</div>
+                        <div id="costCar1">-</div>
+                        <div id="costCar2">-</div>
+                    </div>
+                    
+                    <div class="grid grid-cols-3 gap-4 py-3 border-b bg-yellow-50">
+                        <div class="text-gray-700">Savings</div>
+                        <div id="costSavings" class="col-span-2">-</div>
+                    </div>
+                    
+                    <div class="grid grid-cols-3 gap-4 py-3">
+                        <div class="text-gray-700">Conclusion</div>
+                        <div id="costConclusion" class="col-span-2 text-gray-600 italic text-sm">-</div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script>
-        // Your vehicle data array (example data, replace with your updated array)
+        // Vehicle data array with the new entry added
         const vehicleData = [
             {"Model": "Air EV", "CO₂ Emission (kg/km)": 0.08, "Cost per km (Rp)": 219.47},
             {"Model": "Binguo", "CO₂ Emission (kg/km)": 0.08, "Cost per km (Rp)": 236.74},
@@ -150,7 +129,8 @@
             {"Model": "Avanza Veloz Matic", "CO₂ Emission (kg/km)": 0.22, "Cost per km (Rp)": 1152.38},
             {"Model": "Kijang Innova Zenix", "CO₂ Emission (kg/km)": 0.19, "Cost per km (Rp)": 1000.83},
             {"Model": "Kijang Innova Zenix G Hybrid", "CO₂ Emission (kg/km)": 0.10, "Cost per km (Rp)": 533.04},
-            {"Model": "Cross Hybrid", "CO₂ Emission (kg/km)": 0.07, "Cost per km (Rp)": 390.32}
+            {"Model": "Cross Hybrid", "CO₂ Emission (kg/km)": 0.07, "Cost per km (Rp)": 390.32},
+            {"Model": "Innova Diesel", "CO₂ Emission (kg/km)": 0.2, "Cost per km (Rp)": 1046.15}
         ];
 
         // Populate dropdowns with vehicle models
@@ -167,7 +147,6 @@
         populateDropdown("car1");
         populateDropdown("car2");
 
-        
         // Calculate and display results
         const calculateResults = () => {
             const car1 = document.getElementById("car1").value;
@@ -188,7 +167,9 @@
 
                     const emissionReductionElement = document.getElementById("emissionReduction");
                     emissionReductionElement.textContent = emissionDiff < 0 ? `${formattedEmissionDiff}%` : `-${formattedEmissionDiff}%`;
-                    emissionReductionElement.style.color = emissionDiff < 0 ? "green" : "red";
+                    emissionReductionElement.className = emissionDiff < 0 
+                        ? "col-span-2 text-green-600" 
+                        : "col-span-2 text-red-600";
 
                     const emissionConclusionElement = document.getElementById("emissionConclusion");
                     emissionConclusionElement.textContent = emissionDiff < 0
@@ -205,7 +186,9 @@
 
                     const costSavingsElement = document.getElementById("costSavings");
                     costSavingsElement.textContent = costDiff < 0 ? `Rp ${formattedCostDiff}` : `-Rp ${formattedCostDiff}`;
-                    costSavingsElement.style.color = costDiff < 0 ? "green" : "red";
+                    costSavingsElement.className = costDiff < 0 
+                        ? "col-span-2 text-green-600" 
+                        : "col-span-2 text-red-600";
 
                     const costConclusionElement = document.getElementById("costConclusion");
                     costConclusionElement.textContent = costDiff < 0
